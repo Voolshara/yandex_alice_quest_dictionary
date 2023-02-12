@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "yandex-alice-quest-dictionary"
+version = "0.1.0"
+description = ""
+authors = ["StanisLove <sta-tun-slav@yandex.ru>"]
+readme = "README.md"
+packages = [{include = "yandex_alice_quest_dictionary"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^2.2.2"
+sqlalchemy = "^2.0.3"
+python-dotenv = "^0.21.1"
+psycopg2-binary = "^2.9.5"
+
+[tool.poetry.scripts]
+start = "yandex_alice_quest_dictionary.main:run"
+setup_db = "yandex_alice_quest_dictionary.db.db:setup_base_data"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
