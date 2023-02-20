@@ -24,7 +24,7 @@ def main():
     return json.dumps(response)
 
 
-def hello(user_id: int) -> str, list:
+def hello(user_id: int):
     user_db_id = get_user_id(user_id)
     if user_db_id == -1:
         user_db_id = new_user(user_id)
@@ -85,18 +85,6 @@ def handle_dialog(res,req):
                 }
             }
         }
-        for el in buttons:
-            "card": {
-            "type": "ItemsList",
-            ...
-            "footer": {
-                "text": "Текст блока под изображением.",
-                "button": {
-                "text": "Надпись на кнопке",
-                "url": "https://example.com/",
-                "payload": {}
-                }
-            }
         res['response']['buttons'] = buttons
         ## Если это первое сообщение — представляемся
         
