@@ -1,41 +1,29 @@
 version: "3.5"
 
 services:
-  postgres:
-    container_name: postgres_container
-    image: postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
+  # bot_start:
+  #   image: "app-base"
+  #   env_file: ".env"
+  #   network_mode: "host"
+  #   command: "*"
+
+  # bot_setup:
+  #   image: "app-base"
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: "setup_db"
+
+  zmongodb:
+    image: mongo:5.0
     ports:
-      - "5432:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: "False"
+      - 27017:27017
     volumes:
-      - pgadmin:/var/lib/pgadmin
-
-    ports:
-      - "${PGADMIN_PORT:-5050}:3500"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-networks:
-  postgres:
-    driver: bridge
-
-volumes:
-  postgres:
-  pgadmin:
+      - ~/apps/mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER:-dbname}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD:-changeme}
+      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME:-Alice_quest}
+    restart: always
+    logging:
+      driver: none
