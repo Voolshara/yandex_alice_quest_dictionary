@@ -126,7 +126,8 @@ def handle_dialog(res,req):
         
         res["state"] = {
             "session" : {
-                "value": 1,
+                "run_quest" : req['request']['original_utterance'],
+                "state": "quest",
             }
         },
 
