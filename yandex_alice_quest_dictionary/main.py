@@ -33,6 +33,7 @@ def get_all_dicts() -> list:
                 "description": el["description"],
             }
         )
+    return out
 
 
 
