@@ -129,6 +129,8 @@ def handle_dialog(res,req):
             "state": "quest",
         },
         res['response']["session_state"] = state_data
+        pp(state_data)
+        pp(res['response'])
 
 def run():
     app.run("0.0.0.0", port="5000")
