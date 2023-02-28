@@ -60,7 +60,6 @@ def main():
     }
     ## Заполняем необходимую информацию
     handle_dialog(response, request.json)
-    pp(response)
     return json.dumps(response)
 
 
@@ -85,11 +84,12 @@ def handle_dialog(res,req):
         ## Проверяем, есть ли содержимое
         answ, buttons = hello(user_id)
         res['response'] = {
+            "text" : answ,
             "card": {
                 "type": "ItemsList",
-                "header": {
-                    "text": answ,
-                },
+                # "header": {
+                #     "text": answ,
+                # },
                 "items": buttons
                 # [
                 #     {
