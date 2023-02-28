@@ -124,10 +124,11 @@ def handle_dialog(res,req):
     elif req['request']['original_utterance'] in dict_list:
         res['response']['text'] = dict_desc[req['request']['original_utterance']]
         
-        res['response']["session_state"] = {
+        state_data = {
             "run_quest" : req['request']['original_utterance'],
             "state": "quest",
         },
+        res['response']["session_state"] = state_data
 
 def run():
     app.run("0.0.0.0", port="5000")
