@@ -75,6 +75,12 @@ def hello(user_id: int):
         return "Привет, я бот организатор квеста. Рад тебя видеть.\nСпроси что я умею или сразу приступай к квесту.\nДоступные квесты:", dictionary_list
 
 
+def on_quest_state(user_id):
+    pass
+
+
+def prepare_quest(user_id):
+    pass
 
 
 def handle_dialog(res,req):
@@ -116,14 +122,13 @@ def handle_dialog(res,req):
         }
     elif req['request']['original_utterance'] in dict_list:
         res['response']['text'] = dict_desc[req['request']['original_utterance']]
-        res["state"] = {
-            "session": {
-                "value": {
-                    "run_quest" : req['request']['original_utterance'],
-                    "state": "quest",
-                },
-            }
-        }
+        
+        res["session_state"] = {
+            "value": {
+                "run_quest" : req['request']['original_utterance'],
+                "state": "quest",
+            },
+        },
 
 def run():
     app.run("0.0.0.0", port="5000")
