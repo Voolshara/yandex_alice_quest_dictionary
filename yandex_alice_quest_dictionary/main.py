@@ -126,10 +126,10 @@ def handle_dialog(res,req):
         res['response']['text'] = dict_desc[req['request']['original_utterance']]
         
         res["session_state"] = {
-            "type" : 1,
             "run_quest" : req['request']['original_utterance'],
             "state": "quest",
         },
+        print(res["session_state"])
 
 def run():
     app.run("0.0.0.0", port="5000")
