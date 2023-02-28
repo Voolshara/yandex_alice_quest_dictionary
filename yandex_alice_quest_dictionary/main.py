@@ -120,14 +120,17 @@ def handle_dialog(res,req):
                 # }
             }
         }
+    
     elif req['request']['original_utterance'] in dict_list:
         res['response']['text'] = dict_desc[req['request']['original_utterance']]
         
-        res["session_state"] = {
-            "value": {
-                "run_quest" : req['request']['original_utterance'],
-                "state": "quest",
-            },
+        res["state"] = {
+            "session" : {
+                "value": {
+                    "run_quest" : req['request']['original_utterance'],
+                    "state": "quest",
+                },
+            }
         },
 
 def run():
