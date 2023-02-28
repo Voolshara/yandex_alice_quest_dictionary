@@ -81,7 +81,7 @@ def hello(user_id: int):
 def handle_dialog(res,req):
     user_id = req["session"]["user_id"]
     dict_list, dict_desc = get_dicts_list_and_description(user_id)
-    if req['request']['original_utterance']:
+    if req['request']['original_utterance'] == "":
         ## Проверяем, есть ли содержимое
         res['response']['text'] = req['request']['original_utterance']
     elif req['request']['original_utterance'] in dict_list:
