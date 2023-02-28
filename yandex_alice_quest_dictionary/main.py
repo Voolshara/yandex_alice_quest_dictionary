@@ -60,6 +60,7 @@ def main():
     }
     ## Заполняем необходимую информацию
     handle_dialog(response, request.json)
+    pp(response)
     return json.dumps(response)
 
 
