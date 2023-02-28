@@ -20,6 +20,37 @@ CONNECTION_STRING = "mongodb://{}:{}@{}/".format(
 db = MongoClient(CONNECTION_STRING).athome
 
 
+# ______________ Dicitionaries ___________________
+
+# {
+#     "name" : "name",
+#     "desc" : "text",
+#     "img_id" : "<img>",
+#     "keys" : {
+#       "key" : "value"
+#     }
+#     code: "test",
+#     status: "active",
+# }
+
+# _________________________________________________
+
+
+# ________________Users____________________________
+
+# {
+#     "user_id" : "<user_id>",
+#     "state" : "<state>",
+#     "keys" : {
+#         "<dict_name>" : {
+#             "key" : "value"
+#         }
+#     }
+# }
+
+# _________________________________________________
+
+
 class MongoDatabase():
     def __init__(self):
         pass
@@ -133,7 +164,7 @@ def setup_dicitionaries():
         
         desc_data = get_file_data(path, dict_name, ".txt", "r")
         if desc_data is None:
-            desc_data = "Это квест\nОчень хороший квест"
+            desc_data = "Тестовый квест\nОчень хороший квест"
         
         img_extension = [".png", ".jpg", ".jpeg"]
         img_exe_index = 0
