@@ -125,7 +125,7 @@ def handle_dialog(res,req):
         res['response']['text'] = dict_desc[req['request']['original_utterance']]
         
         res["session_state"] = {
-            "type" : "session",
+            "type" : "json",
             "run_quest" : req['request']['original_utterance'],
             "state": "quest",
         },
