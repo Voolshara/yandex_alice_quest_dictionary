@@ -68,13 +68,13 @@ def hello(user_id: int):
         Users.add_row({"user" : user_id, "status" : "base"})
         dictionary_list = get_all_dicts()
         return "Привет, я бот организатор квеста!\n\
-Спроси что я умею или сразу приступай к организации мероприятия.\n\
+Спроси что я умею или сразу приступай к квесту.\n\
 Доступные квесты:\n", dictionary_list
     else:
         dictionary_list = get_all_dicts()
-        return "Привет рад снова тебя видеть, я бот организатор квеста!.\n\
-Спроси что я умею или сразу приступай к организации мероприятия.\n\
-Доступные квесты:", dictionary_list
+        return "Привет рад снова тебя видеть, я бот организатор квеста!.\nСпроси что я умею.\nДоступные квесты:", dictionary_list
+
+
 
 
 def handle_dialog(res,req):
