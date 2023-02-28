@@ -134,8 +134,8 @@ def handle_dialog(res,req):
         state_data["run_quest"] = state_data["run_quest"][0]
         state_data["state"] = state_data["state"][0]
 
-        res['response']["session_state"] = dict()
-        res['response']["session_state"]["value"] = state_data
+        res["session_state"] = state_data
+        # res["session_state"]["value"] = state_data
 
         pp(state_data)
         pp(res['response'])
