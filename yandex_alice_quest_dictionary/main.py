@@ -60,7 +60,6 @@ def main():
     }
     ## Заполняем необходимую информацию
     handle_dialog(response, request.json)
-    pp(response)
     return json.dumps(response)
 
 
@@ -125,11 +124,10 @@ def handle_dialog(res,req):
     elif req['request']['original_utterance'] in dict_list:
         res['response']['text'] = dict_desc[req['request']['original_utterance']]
         
-        res["session_state"] = {
+        res['response']["session_state"] = {
             "run_quest" : req['request']['original_utterance'],
             "state": "quest",
         },
-        print(res["session_state"])
 
 def run():
     app.run("0.0.0.0", port="5000")
