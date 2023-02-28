@@ -17,8 +17,8 @@ def get_dicts_list_and_description(user_id: str):
     just_list = []
     desc = {}
     for el in Dictionaries.get_all_rows({"status": "active"}):
-        just_list.append(el["title"])
-        desc[el["title"]] = el["description"]
+        just_list.append(el["name"])
+        desc[el["name"]] = el["description"]
     return just_list
         
 
@@ -125,4 +125,4 @@ def handle_dialog(res,req):
 
 
 def run():
-    app.run("localhost", port="5000")
+    app.run("0.0.0.0", port="5000")
