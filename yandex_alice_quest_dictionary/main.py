@@ -124,9 +124,12 @@ def handle_dialog(res,req):
     elif req['request']['original_utterance'] in dict_list:
         res['response']['text'] = dict_desc[req['request']['original_utterance']]
         
+        quest = req['request']['original_utterance']
+        quest_status = "quest"
+
         state_data = dict()
-        state_data["run_quest"] = req['request']['original_utterance'],
-        state_data["state"] = "quest",
+        state_data["run_quest"] = quest,
+        state_data["state"] = quest_status,
 
         res['response']["session_state"] = state_data
 
