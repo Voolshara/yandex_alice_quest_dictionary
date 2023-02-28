@@ -19,7 +19,7 @@ def get_dicts_list_and_description(user_id: str):
     for el in Dictionaries.get_all_rows({"status": "active"}):
         just_list.append(el["name"])
         desc[el["name"]] = el["description"]
-    return just_list
+    return just_list, desc
         
 
 def get_all_dicts() -> list:
@@ -72,7 +72,7 @@ def hello(user_id: int):
 Доступные квесты:\n", dictionary_list
     else:
         dictionary_list = get_all_dicts()
-        return "Привет рад снова тебя видеть, я бот организатор квеста!.\nСпроси что я умею.\nДоступные квесты:", dictionary_list
+        return "Привет, я бот организатор квеста. Рад тебя видеть.\nСпроси что я умею или сразу приступай к квесту.\nДоступные квесты:", dictionary_list
 
 
 
@@ -115,8 +115,11 @@ def handle_dialog(res,req):
             }
         }
     elif req['request']['original_utterance'] in dict_list:
-        res['response']['text'] = dict_desc[req['request']['original_utterance']]       
-
+        res['response']['text'] = dict_desc[req['request']['original_utterance']]
+        res["session_state"] = {
+            "run_quest" : req['request']['original_utterance'],
+            "state": "quest",
+        },
 
 def run():
     app.run("0.0.0.0", port="5000")
