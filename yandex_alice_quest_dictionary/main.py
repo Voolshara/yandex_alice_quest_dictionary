@@ -82,14 +82,15 @@ def handle_dialog(res,req):
     dict_list, dict_desc = get_dicts_list_and_description(user_id)
     if req['request']['original_utterance'] == "":
         ## Проверяем, есть ли содержимое
+        ## Если это первое сообщение — представляемся
         answ, buttons = hello(user_id)
         res['response'] = {
             "text" : answ,
             "card": {
                 "type": "ItemsList",
-                # "header": {
-                #     "text": answ,
-                # },
+                "header": {
+                    "text": answ,
+                },
                 "items": buttons
                 # [
                 #     {
@@ -113,11 +114,6 @@ def handle_dialog(res,req):
                 # }
             }
         }
-        ## Если это первое сообщение — представляемся
-        buttons.append({
-            'title': 'Настройка квеста',
-        })
-        res['response']['buttons'] = buttons 
     elif req['request']['original_utterance'] in dict_list:
         res['response']['text'] = dict_desc[req['request']['original_utterance']]       
 
