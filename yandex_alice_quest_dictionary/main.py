@@ -128,8 +128,11 @@ def handle_dialog(res,req):
         quest_status = "quest"
 
         state_data = dict()
-        state_data["run_quest"] = quest[0],
-        state_data["state"] = quest_status[0],
+        state_data["run_quest"] = quest,
+        state_data["state"] = quest_status,
+
+        state_data["run_quest"] = state_data["run_quest"][0]
+        state_data["state"] = state_data["state"][0]
 
         res['response']["session_state"] = state_data
 
