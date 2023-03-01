@@ -120,7 +120,7 @@ def handle_dialog(res,req):
                 # }
             }
         }
-    elif 
+    # elif 
     elif req['request']['original_utterance'] in dict_list:
         res['response']['text'] = dict_desc[req['request']['original_utterance']]
         
