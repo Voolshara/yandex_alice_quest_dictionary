@@ -96,7 +96,7 @@ def no_uderstand(res):
 
 def on_quest_state(res, req):
     now_quest = req["state"]["session"]["run_quest"]
-    quest_data  = get_dict(now_quest)
+    quest_data  = get_dict(req["session"]["user_id"], now_quest)
     
     if len(quest_data) == 0:
         res['response']['text'] = "Я не нашёл нужный квест\nДавай начнём с начала"
