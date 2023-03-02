@@ -42,13 +42,9 @@ class Alice_Worker:
         self.state = json_req["state"]["session"]
 
         self.input_text = json_req['request']['original_utterance']
-        if self.input_text == "" or self.input_text in self.dicts:
-            self.state = {
-                "state" : "base"
-            }
         
     def load_dict(self):
-        now_quest = self.state["state"]["running_quest"]
+        now_quest = self.state["running_quest"]
         keys = Dictionaries.get_all_rows({
             "status" : "active",
             "name" : now_quest
@@ -75,11 +71,20 @@ class Alice_Worker:
     def get_response(self):
         self.response["session_state"] = self.state
         buttons = []
-        for el in self.dicts:
+        # for el in self.dicts:
+        #     buttons.append({
+        #         'title': el
+        #     })
+
+        if self.state["state"] == "quest":
             buttons.append({
-                'title': el
+                "title" : "Оставновить квест"
             })
-        buttons.append({"title" : "Настройка квеста"})
+        elif self.state["state"] == "start":
+            pass
+        else:
+            buttons.append({"title" : "Выбрать квест"})
+            buttons.append({"title" : "Настроить квест"})
         self.response['response']['buttons'] = buttons  
         
         # logging.info(pformat(self.response))
@@ -106,6 +111,12 @@ def on_quest_state(Alice):
 
     if key_word not in keys_dict:
         Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
+    
+    elif key_word.lower() in ["оставновить квест", "стоп"]:
+        Alice.state = {
+            "state" : "base"
+        }
+        Alice.response["response"]["text"] = "Спасибо за игру. Квест остановлен"
     else:
         keys = ["Локация", "Искомое место", "Здесь", "Посмотри тут"]
         Alice.response['response']['text'] = "%s: %s" % (choice(keys), keys_dict[key_word])
@@ -115,12 +126,17 @@ def prepare_quest(Alice):
     if Alice.input_text in Alice.dicts:
         Alice.response['response']['text'] = Alice.dicts_descriptions[Alice.input_text]
         Alice.set_quest_status()
-        return 
+        return
+    elif Alice.input_text.lower == "что ты умеешь":
+        Alice.response['response']['text'] = "Привет, я проведу для тебя квест. Выбери один из доступных. Ты так же можешь настроить ключевые слова под себя"
     no_understanding(Alice)
 
 
 def handle_dialog(Alice):
-    if Alice.input_text == "":
+    if Alice.input_text == "" or Alice.input_text == "Выбрать квест":
+        Alice.state = {
+                "state" : "start"
+            }
         ## Проверяем, есть ли содержимое
         ## Если это первое сообщение — представляемся
         answ, buttons = hello(Alice)
