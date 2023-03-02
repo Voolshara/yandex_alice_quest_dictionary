@@ -1,18 +1,19 @@
 version: "3.5"
 
 services:
-  # bot_start:
-  #   image: "app-base"
-  #   env_file: ".env"
-  #   network_mode: "host"
-  #   command: "*"
+  bot_start:
+    image: "app-base"
+    env_file: ".env"
+    network_mode: "host"
+    command: "start"
+  restart: always
 
-  # bot_setup:
-  #   image: "app-base"
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command: "setup_db"
+  bot_setup:
+    image: "app-base"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "setup_db"
 
   zmongodb:
     image: mongo:5.0
