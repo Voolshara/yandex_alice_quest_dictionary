@@ -80,10 +80,8 @@ def base_state(Alice):
 
 
 def settings_choose_dict(Alice):
-    keys_dict = Alice.load_dict()
     key_word = Alice.input_text.lower()
-    
-    if key_word in keys_dict:
+    if key_word in Alice.dicts:
         Alice.response["response"]["text"] = "Приступаем к изменнию ключевых слов: %s. Скажи ключевое слово, а после новое значение" % key_word
         Alice.state["status"] = "w8_key"
         Alice.state["running_quest"] = key_word
@@ -128,6 +126,7 @@ def setting_get_value(Alice):
         key_word,
     )
     Alice.state["status"] = "w8_key"
+
 
 def settings(Alice):
     key_word = Alice.input_text.lower()
