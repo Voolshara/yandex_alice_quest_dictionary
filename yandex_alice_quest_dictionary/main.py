@@ -3,14 +3,11 @@ from flask import request
 from yandex_alice_quest_dictionary.db.mongo import db_collection
 import json, re
 from pprint import pformat
-from random import choice
 from dotenv import load_dotenv
 import logging
 
 from yandex_alice_quest_dictionary.db.mongo import Users, Dictionaries
-from yandex_alice_quest_dictionary.handlers import hello, no_understanding
-
-
+from yandex_alice_quest_dictionary.handlers import hello, no_understanding, quest_state, base_state, settings
 
 def get_dicts_list_and_description():
     just_list = []
@@ -21,7 +18,7 @@ def get_dicts_list_and_description():
     return just_list, desc
 
 
-class Alice_Worker:
+class Alice_Worker: 
     def __init__(self) -> None:
         self.state = {}
         self.buttons = []
@@ -36,6 +33,7 @@ class Alice_Worker:
                 'end_session': False
             }
         }
+        self.is_use_button = True
         self.user_id = json_req["session"]["user_id"]
         self.dicts, self.dicts_descriptions = get_dicts_list_and_description()
 
@@ -70,22 +68,24 @@ class Alice_Worker:
 
     def get_response(self):
         self.response["session_state"] = self.state
-        buttons = []
-        # for el in self.dicts:
-        #     buttons.append({
-        #         'title': el
-        #     })
+        
+        if self.is_use_button:
+            buttons = []
+            # for el in self.dicts:
+            #     buttons.append({
+            #         'title': el
+            #     })
 
-        if self.state["state"] == "quest":
-            buttons.append({
-                "title" : "Оставновить квест"
-            })
-        elif self.state["state"] == "start":
-            pass
-        else:
-            buttons.append({"title" : "Выбрать квест"})
-            buttons.append({"title" : "Настроить квест"})
-        self.response['response']['buttons'] = buttons  
+            if self.state["state"] == "quest":
+                buttons.append({
+                    "title" : "Оставновить квест"
+                })
+            elif self.state["state"] == "start":
+                pass
+            else:
+                buttons.append({"title" : "Выбрать квест"})
+                buttons.append({"title" : "Настроить квест"})
+            self.response['response']['buttons'] = buttons  
         
         # logging.info(pformat(self.response))
         return self.response
@@ -105,42 +105,15 @@ def main():
     return json.dumps(Alice.get_response())
 
 
-def on_quest_state(Alice):
-    keys_dict = Alice.load_dict()
-    key_word = Alice.input_text.lower()
-
-    if key_word not in keys_dict:
-        Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
-    
-    elif key_word in ["оставновить квест", "стоп"]:
-        Alice.state = {
-            "state" : "base"
-        }
-        Alice.response["response"]["text"] = "Спасибо за игру. Квест остановлен"
-    else:
-        keys = ["Локация", "Искомое место", "Здесь", "Посмотри тут"]
-        Alice.response['response']['text'] = "%s: %s" % (choice(keys), keys_dict[key_word])
-
-
-def prepare_quest(Alice):
-    if Alice.input_text in Alice.dicts:
-        Alice.response['response']['text'] = Alice.dicts_descriptions[Alice.input_text]
-        Alice.set_quest_status()
-        return
-    elif Alice.input_text.lower() == "что ты умеешь":
-        Alice.response['response']['text'] = "Привет, я проведу для тебя квест. Выбери один из доступных. Ты так же можешь настроить ключевые слова под себя"
-        return
-    no_understanding(Alice)
-
-
 def handle_dialog(Alice):
     if Alice.input_text == "" or Alice.input_text == "Выбрать квест":
         Alice.state = {
                 "state" : "base"
             }
+        Alice.is_use_button = False
         ## Проверяем, есть ли содержимое
         ## Если это первое сообщение — представляемся
-        answ, buttons = hello(Alice)
+        answ, cards = hello(Alice)
         Alice.response['response'] = {
             "text" : answ,
             "card": {
@@ -148,13 +121,15 @@ def handle_dialog(Alice):
                 "header": {
                     "text": answ,
                 },
-                "items": buttons
+                "items": cards
             }
         }
     elif Alice.state["state"] == "base":
-        prepare_quest(Alice)
+        base_state(Alice)
     elif Alice.state["state"] == "quest":
-        on_quest_state(Alice)
+        quest_state(Alice)
+    elif Alice.state["state"] == "settings":
+        settings(Alice)
     else:
         no_understanding(Alice)
 
