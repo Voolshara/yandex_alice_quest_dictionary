@@ -65,7 +65,11 @@ class MongoDatabase():
         return db[self.collection_name].find_one(sort=by_sort)
     
     def get_all_rows(self, row):
-        return [x for x in db[self.collection_name].find(row)]
+        out = []
+        for x in db[self.collection_name].find(row):
+            x.pop("_id", None)
+            out.append(x)
+        return out
     
     def get_all_unique(self, row):
         return [x for x in db[self.collection_name].distinct("keys", row)]
