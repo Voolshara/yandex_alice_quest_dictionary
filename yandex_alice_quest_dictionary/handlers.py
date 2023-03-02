@@ -34,14 +34,14 @@ def quest_state(Alice):
     keys_dict = Alice.load_dict()
     key_word = Alice.input_text.lower()
 
-    if key_word not in keys_dict:
-        Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
-    
-    elif key_word in ["оставновить квест", "стоп"]:
+    if key_word in ["остановить квест", "стоп"]:
         Alice.state = {
             "state" : "base"
         }
         Alice.response["response"]["text"] = "Спасибо за игру. Квест остановлен"
+    elif key_word not in keys_dict:
+        Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
+    
     else:
         keys = ["Локация", "Искомое место", "Здесь", "Посмотри тут"]
         Alice.response['response']['text'] = "%s: %s" % (choice(keys), keys_dict[key_word])

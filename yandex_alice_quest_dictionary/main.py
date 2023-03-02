@@ -78,7 +78,7 @@ class Alice_Worker:
 
             if self.state["state"] == "quest":
                 buttons.append({
-                    "title" : "Оставновить квест"
+                    "title" : "Остановить квест"
                 })
             elif self.state["state"] == "start":
                 pass
