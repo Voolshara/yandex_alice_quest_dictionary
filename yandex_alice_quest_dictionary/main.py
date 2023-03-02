@@ -48,7 +48,6 @@ class Alice_Worker:
             "name" : now_quest
         })[0]["keys"]
 
-
         custom_keys = Users.get_all_rows({
             "user_id" : self. user_id  
         })[0]["keys"]

@@ -53,6 +53,16 @@ def base_state(Alice):
         Alice.set_quest_status()
         return
     
+    elif Alice.input_text.lower() == "выбрать квест":
+        _, cards = hello(Alice)
+        Alice.response['response']["card"] = {
+            "type": "ItemsList",
+                "header": {
+                    "text": text,
+                },
+                "items" : cards
+        }        
+    
     elif Alice.input_text.lower() == "что ты умеешь":
         Alice.response['response']['text'] = "Привет, я проведу для тебя квест. Выбери один из доступных. Ты так же можешь настроить ключевые слова под себя"
         return
