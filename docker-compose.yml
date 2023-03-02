@@ -6,7 +6,7 @@ services:
     env_file: ".env"
     network_mode: "host"
     command: "start"
-  restart: always
+    restart: always
 
   bot_setup:
     image: "app-base"
