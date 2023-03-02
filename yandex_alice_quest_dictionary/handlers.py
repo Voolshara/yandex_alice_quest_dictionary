@@ -54,6 +54,8 @@ def base_state(Alice):
         return
     
     elif Alice.input_text.lower() == "выбрать квест":
+        text = "Выбери квест"
+        Alice.response['response']['text'] = text
         _, cards = hello(Alice)
         Alice.response['response']["card"] = {
             "type": "ItemsList",
