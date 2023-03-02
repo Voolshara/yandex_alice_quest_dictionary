@@ -4,9 +4,11 @@ from yandex_alice_quest_dictionary.db.mongo import db_collection
 import json, re
 from random import choice
 from dotenv import load_dotenv
-from typing import Optional
+import logging
+
 from yandex_alice_quest_dictionary.db.mongo import Users, Dictionaries
 from yandex_alice_quest_dictionary.handlers import hello, no_understanding
+
 
 
 def get_dicts_list_and_description():
@@ -78,10 +80,13 @@ class Alice_Worker:
             })
         buttons.append({'Настройка квеста'})
         self.response['response']['buttons'] = buttons  
+        
+        logging.info(self.response)
         return self.response
     
 
 load_dotenv("yandex_alice_quest_dictionary/.env")
+logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 Alice = Alice_Worker()
 
