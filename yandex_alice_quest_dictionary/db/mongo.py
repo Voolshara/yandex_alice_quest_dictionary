@@ -205,7 +205,7 @@ def setup_dicitionaries():
 
         Dictionaries.new_dict(
             dict_name.strip().lower(),
-            desc_data.split("\n")[0], 
+            desc_data.split("\n")[0].lower(), 
             "\n" .join(desc_data.split("\n")[1:]),
             photo_id, 
             collection,
