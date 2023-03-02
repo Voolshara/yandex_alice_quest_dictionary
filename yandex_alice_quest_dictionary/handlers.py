@@ -61,7 +61,7 @@ def base_state(Alice):
         text = "Здесь ты можешь изменить ключевые слова. Выбери квест, который хочешь изменить:"
         Alice.response['response']['text'] = text
         _, cards = hello(Alice)
-        Alice.resonse['response']["card"] = {
+        Alice.response['response']["card"] = {
             "type": "ItemsList",
                 "header": {
                     "text": text,
@@ -70,7 +70,8 @@ def base_state(Alice):
         }
         
         Alice.state = {
-            "state" : "settings"
+            "state" : "settings",
+            "status" : "choose_dict",
         }
         
         return
@@ -78,12 +79,85 @@ def base_state(Alice):
     no_understanding(Alice)
 
 
+def settings_choose_dict(Alice):
+    keys_dict = Alice.load_dict()
+    key_word = Alice.input_text.lower()
+    
+    if key_word in keys_dict:
+        Alice.response["response"]["text"] = "Приступаем к изменнию ключевых слов: %s. Скажи ключевое слово, а после новое значение" % key_word
+        Alice.state["status"] = "w8_key"
+        Alice.state["running_quest"] = key_word
+        return
+    Alice.response["response"]["text"] = "Выбери квест из предложенных"
+    _, cards = hello(Alice)
+    Alice.response['response']["card"] = {
+        "type": "ItemsList",
+        "header": {
+            "text": "Выбери квест из предложенных",
+        },
+        "items" : cards
+    }
+
+
+def settings_get_key(Alice):
+    keys_dict = Alice.load_dict()
+    key_word = Alice.input_text.lower()
+    if key_word not in keys_dict:
+        Alice.response["response"]["text"] = "Неправильное ключевое слово\nПопробуй ещё раз"       
+        return 
+    Alice.state["status"] = "w8_value"
+    Alice.state["choosen_key"] = key_word
+    Alice.response["response"]["text"] = "Какое место будет?"       
+
+
+def setting_get_value(Alice):
+    key_word = Alice.input_text.lower()
+    
+    user_dicts = Users.get_all_rows({"user_id" : Alice.user_id})["keys"]
+    if Alice.state["running_quest"] in user_dicts:
+        temp_dict = user_dicts[Alice.state["running_quest"]]
+    else:
+        temp_dict = {}
+    temp_dict[Alice.state["choosen_key"]] = key_word
+    user_dicts[Alice.state["running_quest"]] = temp_dict
+    Users.change_data({"user_id": Alice.user_id}, {"keys" : user_dicts})
+    
+    Alice.response["response"]["text"] = "Для события: %s изменено ключевое слово %s на %s\nСкажите следущее ключевое слово" % (
+        Alice.state["running_quest"],
+        Alice.state["choosen_key"],
+        key_word,
+    )
+    Alice.state["status"] = "w8_key"
+
 def settings(Alice):
-    Alice.response['response']['text'] = "QU"
+    key_word = Alice.input_text.lower()
+    
+    if key_word in ["остановить настройку", "стоп"]:
+        Alice.state = {
+            "state" : "base"
+        }
+        Alice.response["response"]["text"] = "Готово. Изменения внесены."
+    
+    elif Alice.state["status"] == "choose_dict":
+        settings_choose_dict(Alice)
+
+    elif Alice.state["status"] == "w8_key":
+        settings_get_key(Alice)
+
+    elif Alice.state["status"] == "w8_value":
+        setting_get_value(Alice)
+
+    
+
+
+    # elif key_word not in keys_dict:
+    #     Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
+    # else:
+    #     keys = ["Локация", "Искомое место", "Здесь", "Посмотри тут"]
+    #     Alice.response['response']['text'] = "%s: %s" % (choice(keys), keys_dict[key_word])
+
+    # Alice.response['response']['text'] = "QU"
 
 
 def no_understanding(Alice):
-    Alice.state = {
-        "state" : "base", 
-    }
     Alice.response['response']['text'] = "Я тебя не понял. Выбери квест или настрой его под себя"

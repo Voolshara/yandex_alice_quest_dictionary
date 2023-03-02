@@ -97,11 +97,11 @@ class Users_class(MongoDatabase):
             "keys" : {}
         })
 
-    def change_dict(self, user_id, diict_name):
-        pass
+    # def change_dict(self, user_id, diict_name):
+    #     pass
 
-    def get_user_dicts(self, user_id):
-        pass
+    # def get_user_dicts(self, user_id):
+    #     pass
 
 
 class Dictionaries_class(MongoDatabase):

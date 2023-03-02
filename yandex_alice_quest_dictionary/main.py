@@ -80,13 +80,20 @@ class Alice_Worker:
                 buttons.append({
                     "title" : "Остановить квест"
                 })
+            elif self.state["state"] == "settings":
+                buttons.append({
+                    "title" : "Остановить настройку"
+                })
             elif self.state["state"] == "start":
                 pass
+            
             else:
                 buttons.append({"title" : "Выбрать квест"})
                 buttons.append({"title" : "Настроить квест"})
             self.response['response']['buttons'] = buttons  
-        
+
+
+
         # logging.info(pformat(self.response))
         return self.response
     
@@ -131,6 +138,9 @@ def handle_dialog(Alice):
     elif Alice.state["state"] == "settings":
         settings(Alice)
     else:
+        Alice.state = {
+            "state" : "base", 
+        }
         no_understanding(Alice)
 
         
