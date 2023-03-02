@@ -108,10 +108,10 @@ def settings_get_key(Alice):
     Alice.response["response"]["text"] = "Какое место будет?"       
 
 
-def setting_get_value(Alice):
+def settings_get_value(Alice):
     key_word = Alice.input_text.lower()
     
-    user_dicts = Users.get_all_rows({"user_id" : Alice.user_id})["keys"]
+    user_dicts = Users.get_all_rows({"user_id" : Alice.user_id})[0]["keys"]
     if Alice.state["running_quest"] in user_dicts:
         temp_dict = user_dicts[Alice.state["running_quest"]]
     else:
@@ -144,7 +144,7 @@ def settings(Alice):
         settings_get_key(Alice)
 
     elif Alice.state["status"] == "w8_value":
-        setting_get_value(Alice)
+        settings_get_value(Alice)
 
     
 
