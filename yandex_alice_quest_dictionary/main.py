@@ -79,10 +79,10 @@ class Alice_Worker:
             buttons.append({
                 'title': el
             })
-        buttons.append({'Настройка квеста'})
+        buttons.append({"title" : "Настройка квеста"})
         self.response['response']['buttons'] = buttons  
         
-        logging.info(pformat(self.response))
+        # logging.info(pformat(self.response))
         return self.response
     
 
