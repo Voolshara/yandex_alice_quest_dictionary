@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yandex-alice-quest-dictionary"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["StanisLove <sta-tun-slav@yandex.ru>"]
 readme = "README.md"

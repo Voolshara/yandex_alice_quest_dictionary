@@ -90,8 +90,7 @@ Alice = Alice_Worker()
 def main():
     Alice.load(request.json)
     ## Заполняем необходимую информацию
-    runner_func = Alice.hundle_dialog()
-    runner_func(Alice)
+    handle_dialog(Alice)
     return json.dumps(Alice.get_response())
 
 
