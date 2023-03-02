@@ -41,7 +41,7 @@ class Alice_Worker:
 
         self.state = json_req["state"]["session"]
 
-        self.input_text = json_req['request']['command']
+        self.input_text = json_req['request']['command'].strip().lower()
         
     def load_dict(self):
         now_quest = self.state["running_quest"]
@@ -107,12 +107,12 @@ def main():
 
 def on_quest_state(Alice):
     keys_dict = Alice.load_dict()
-    key_word = Alice.input_text
+    key_word = Alice.input_text.lower()
 
     if key_word not in keys_dict:
         Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
     
-    elif key_word.lower() in ["оставновить квест", "стоп"]:
+    elif key_word in ["оставновить квест", "стоп"]:
         Alice.state = {
             "state" : "base"
         }
@@ -123,7 +123,6 @@ def on_quest_state(Alice):
 
 
 def prepare_quest(Alice):
-    print(Alice.input_text, Alice.dicts)
     if Alice.input_text in Alice.dicts:
         Alice.response['response']['text'] = Alice.dicts_descriptions[Alice.input_text]
         Alice.set_quest_status()

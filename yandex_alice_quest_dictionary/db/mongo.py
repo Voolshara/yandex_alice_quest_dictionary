@@ -201,10 +201,10 @@ def setup_dicitionaries():
             if line == "":
                 continue
             key, value = map(lambda x: x.strip(), line.split(", "))
-            collection[key] = value
+            collection[key.lower()] = value.lower()
 
         Dictionaries.new_dict(
-            dict_name.strip(),
+            dict_name.strip().lower(),
             desc_data.split("\n")[0], 
             "\n" .join(desc_data.split("\n")[1:]),
             photo_id, 
