@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 from yandex_alice_quest_dictionary.db.mongo import db_collection
 import json, re
+from pprint import pformat
 from random import choice
 from dotenv import load_dotenv
 import logging
@@ -81,7 +82,7 @@ class Alice_Worker:
         buttons.append({'Настройка квеста'})
         self.response['response']['buttons'] = buttons  
         
-        logging.info(self.response)
+        logging.info(pformat(self.response))
         return self.response
     
 
