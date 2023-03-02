@@ -218,7 +218,9 @@ drop_dictionaries = Typer()
 @drop_dictionaries.command()
 def run_drop(*, code: str):
     if code ==  "*":
-        Dictionaries.drop_collection()    
+        Dictionaries.drop_collection()
+    elif code == "users":
+        Users.drop_collection()    
     else:
         Dictionaries.change_data(
             {"code": code.strip(), "status": "active"},
