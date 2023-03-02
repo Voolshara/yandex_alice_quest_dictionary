@@ -18,8 +18,8 @@ def get_dicts_for_start() -> list:
 
 
 def hello(Alice):
-    if len(Users.get_all_rows({"user" : Alice.user_id})) == 0:
-        Users.add_row({"user" : Alice.user_id, "status" : "base"})
+    if len(Users.get_all_rows({"user_id" : Alice.user_id})) == 0:
+        Users.new_user(Alice.user_id)
         dictionary_list = get_dicts_for_start()
         return "Привет, я бот организатор квеста!\n\
 Спроси что я умею или сразу приступай к квесту.\n\
