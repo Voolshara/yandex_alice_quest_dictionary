@@ -136,9 +136,6 @@ def prepare_quest(Alice):
 
 def handle_dialog(Alice):
     if Alice.input_text == "" or Alice.input_text == "Выбрать квест":
-        Alice.state = {
-                "state" : "start"
-            }
         ## Проверяем, есть ли содержимое
         ## Если это первое сообщение — представляемся
         answ, buttons = hello(Alice)
