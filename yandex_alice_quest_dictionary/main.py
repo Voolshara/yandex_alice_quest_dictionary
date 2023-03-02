@@ -123,12 +123,12 @@ def on_quest_state(Alice):
 
 
 def prepare_quest(Alice):
-    print(Alice.input_text in Alice.dicts)
+    print(Alice.input_text, Alice.dicts)
     if Alice.input_text in Alice.dicts:
         Alice.response['response']['text'] = Alice.dicts_descriptions[Alice.input_text]
         Alice.set_quest_status()
         return
-    elif Alice.input_text.lower == "что ты умеешь":
+    elif Alice.input_text.lower() == "что ты умеешь":
         Alice.response['response']['text'] = "Привет, я проведу для тебя квест. Выбери один из доступных. Ты так же можешь настроить ключевые слова под себя"
         return
     no_understanding(Alice)
