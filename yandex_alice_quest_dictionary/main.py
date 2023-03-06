@@ -88,10 +88,6 @@ class Alice_Worker:
                 })
             elif self.state["state"] == "start":
                 pass
-            
-            else:
-                buttons.append({"title" : "Выбрать квест"})
-                buttons.append({"title" : "Настроить квест"})
             self.response['response']['buttons'] = buttons  
 
 
