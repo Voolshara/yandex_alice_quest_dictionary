@@ -40,9 +40,7 @@ def quest_state(Alice):
 
     Alice.state["no_understanding"] = 0
     if key_word in ["остановить квест", "стоп"]:
-        Alice.state = {
-            "state" : "base"
-        }
+        Alice.state["state"] = "choose_quest"
         Alice.response["response"]["text"] = "Спасибо за игру. Квест остановлен"
     elif key_word not in keys_dict:
         Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
@@ -92,6 +90,20 @@ def choose_quest(Alice):
         Alice.state["state"] = "settings"
         Alice.state["no_understanding"] = 0
         return
+    elif Alice.input_text.lower() == "настроить квест":
+        Alice.state["state"] = "base"
+        Alice.is_use_button = False 
+        text = "Выбери квест"
+        Alice.response['response']['text'] = text
+        _, cards = hello(Alice)
+        Alice.response['response']["card"] = {
+            "type": "ItemsList",
+                "header": {
+                    "text": text,
+                },
+                "items" : cards
+        }  
+        return
     no_understanding(Alice) 
 
 
@@ -139,9 +151,7 @@ def settings(Alice):
     key_word = Alice.input_text.lower()
     
     if key_word in ["остановить настройку", "стоп"]:
-        Alice.state = {
-            "state" : "base"
-        }
+        Alice.state["state"] = "choose_quest"
         Alice.response["response"]["text"] = "Готово. Изменения внесены."
     
     elif Alice.state["status"] == "choose_dict":
