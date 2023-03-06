@@ -134,19 +134,19 @@ def handle_dialog(Alice):
             }
         }
     elif Alice.state["state"] == "base":
-        logging.info(Alice.state["state"])
+        logging.info(Alice.state)
         base_state(Alice)
     elif Alice.state["state"] == "choose_quest":
-        logging.info(Alice.state["state"])
+        logging.info(Alice.state)
         choose_quest(Alice)
     elif Alice.state["state"] == "quest":
-        logging.info(Alice.state["state"])
+        logging.info(Alice.state)
         quest_state(Alice)
     elif Alice.state["state"] == "settings":
-        logging.info(Alice.state["state"])
+        logging.info(Alice.state)
         settings(Alice)
     else:
-        logging.info(Alice.state["state"])
+        logging.info(Alice.state)
         Alice.state = {
             "state" : "base", 
         }
