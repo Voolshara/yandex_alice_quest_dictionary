@@ -1,5 +1,9 @@
 from yandex_alice_quest_dictionary.db.mongo import Users, Dictionaries
 from random import choice
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
 
 
 def get_dicts_for_start() -> list:
@@ -77,6 +81,7 @@ def base_state(Alice):
 
 def choose_quest(Alice):
     if Alice.input_text.lower() == "запустить квест":
+        logging.info("start quest")
         Alice.response['response']['text'] = "Начинаем квест. Скажи ключевое слово. А я тебе подскажу место."
         Alice.state["state"] = "quest"
         Alice.state["no_understanding"] = 0
