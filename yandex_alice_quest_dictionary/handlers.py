@@ -81,14 +81,15 @@ def base_state(Alice):
 
 def choose_quest(Alice):
     if Alice.input_text.lower() == "запустить квест":
-        logging.info("start quest")
         Alice.response['response']['text'] = "Начинаем квест. Скажи ключевое слово. А я тебе подскажу место."
         Alice.state["state"] = "quest"
         Alice.state["no_understanding"] = 0
+        return
     elif Alice.input_text.lower() == "настроить квест":
         settings_choose_dict(Alice)
         Alice.state["state"] = "settings"
         Alice.state["no_understanding"] = 0
+        return
     no_understanding(Alice) 
 
 
