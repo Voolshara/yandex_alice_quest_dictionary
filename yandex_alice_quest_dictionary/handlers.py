@@ -90,7 +90,7 @@ def choose_quest(Alice):
         Alice.state["state"] = "settings"
         Alice.state["no_understanding"] = 0
         return
-    elif Alice.input_text.lower() == "настроить квест":
+    elif Alice.input_text.lower() == "выбрать другой квест":
         Alice.state["state"] = "base"
         Alice.is_use_button = False 
         text = "Выбери квест"
