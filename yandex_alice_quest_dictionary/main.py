@@ -86,7 +86,7 @@ class Alice_Worker:
                 buttons.append({
                     "title" : "Остановить настройку"
                 })
-            elif self.state["state"] == "start":
+            elif self.state["state"] == "start" or self.state["state"] == "base":
                 pass
             else:
                 buttons.append({"title" : "Выбрать квест"})
@@ -99,7 +99,7 @@ class Alice_Worker:
     
 
 load_dotenv("yandex_alice_quest_dictionary/.env")
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
 app = Flask(__name__)
 Alice = Alice_Worker()
 
