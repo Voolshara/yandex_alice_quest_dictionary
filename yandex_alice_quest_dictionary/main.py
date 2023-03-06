@@ -80,10 +80,8 @@ class Alice_Worker:
                     "title" : "Остановить квест"
                 })
             elif self.state["state"] == "choose_quest":
-                buttons.append(
-                    {"title" : "Запустить квест"},
-                    {"title" : "Настроить квест"},
-                )
+                buttons.append({"title" : "Запустить квест"})
+                buttons.append({"title" : "Настроить квест"})
             elif self.state["state"] == "settings":
                 buttons.append({
                     "title" : "Остановить настройку"
