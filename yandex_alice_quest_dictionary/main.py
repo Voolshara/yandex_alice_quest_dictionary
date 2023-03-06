@@ -25,6 +25,11 @@ class Alice_Worker:
         self.cards = []
         self.text = ""
 
+        with open("yandex_alice_quest_dictionary/all_text.json", "r",  encoding="utf-8") as file:
+            read_json = json.load(file)
+            self.alice_texts = read_json["texts"]
+            self.alice_buttons = read_json["buttons"]
+
     def load(self, json_req: dict):
         self.response = {
             'session': json_req['session'],
@@ -34,6 +39,7 @@ class Alice_Worker:
             }
         }
         self.is_use_button = True
+        self.is_start = False
         self.user_id = json_req["session"]["user_id"]
         self.dicts, self.dicts_descriptions = get_dicts_list_and_description()
 
@@ -68,6 +74,13 @@ class Alice_Worker:
     def get_response(self):
         self.response["session_state"] = self.state
         
+        if self.is_start:
+            buttons = []
+            buttons.append({
+                "title" : "Что ты умеешь?"
+            })
+            self.response['response']['buttons'] = buttons  
+
         if self.is_use_button:
             buttons = []
             # for el in self.dicts:

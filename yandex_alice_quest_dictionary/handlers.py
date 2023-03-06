@@ -26,12 +26,10 @@ def hello(Alice):
     if len(Users.get_all_rows({"user_id" : Alice.user_id})) == 0:
         Users.new_user(Alice.user_id)
         dictionary_list = get_dicts_for_start()
-        return "Привет, я бот организатор квеста!\n\
-Спроси что я умею или сразу приступай к квесту.\n\
-Доступные квесты:\n", dictionary_list
+        return Alice.alice_texts["hello_first"], dictionary_list
     else:
         dictionary_list = get_dicts_for_start()
-        return "Привет, я бот организатор квеста. Рад тебя видеть.\nСпроси что я умею или сразу приступай к квесту.\nДоступные квесты:", dictionary_list
+        return Alice.alice_texts["hello_base"], dictionary_list
 
 
 def quest_state(Alice):
@@ -41,19 +39,18 @@ def quest_state(Alice):
     Alice.state["no_understanding"] = 0
     if key_word in ["остановить квест", "стоп"]:
         Alice.state["state"] = "choose_quest"
-        Alice.response["response"]["text"] = "Спасибо за игру. Квест остановлен"
+        Alice.response["response"]["text"] = Alice.alice_texts["quest_finish"]
     elif key_word not in keys_dict:
-        Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
-    
+        Alice.response['response']['text'] = Alice.alice_texts["quest_wrong_key"]  
     else:
-        keys = ["Локация", "Искомое место", "Здесь", "Посмотри тут"]
-        Alice.response['response']['text'] = "%s: %s" % (choice(keys), keys_dict[key_word])
+        Alice.response['response']['text'] = "%s: %s" % (choice(Alice.alice_texts["quest_good_key"]), keys_dict[key_word])
 
 
 def base_state(Alice):
     if Alice.input_text.lower() == "выбрать квест":
-        Alice.is_use_button = False 
-        text = "Давай начнём. Выбери квест"
+        Alice.is_use_button = False
+        Alice.is_start = True
+        text = Alice.alice_texts["base_choose_quest"]
         Alice.response['response']['text'] = text
         _, cards = hello(Alice)
         Alice.response['response']["card"] = {
@@ -72,8 +69,8 @@ def base_state(Alice):
         }
         Alice.state["no_understanding"] = 0
         return
-    elif Alice.input_text.lower() == "что ты умеешь":
-        Alice.response['response']['text'] = "Привет, я проведу для тебя квест. Выбери один из доступных. Ты так же можешь настроить ключевые слова под себя"
+    elif Alice.input_text.lower() == "что ты умеешь?":
+        Alice.response['response']['text'] = Alice.alice_texts["description"]
         Alice.state["no_understanding"] = 0
         return
     no_understanding(Alice)
@@ -81,7 +78,7 @@ def base_state(Alice):
 
 def choose_quest(Alice):
     if Alice.input_text.lower() == "запустить квест":
-        Alice.response['response']['text'] = "Начинаем квест. Скажи ключевое слово. А я тебе подскажу место."
+        Alice.response['response']['text'] = Alice.alice_texts["quest_start"]
         Alice.state["state"] = "quest"
         Alice.state["no_understanding"] = 0
         return
@@ -93,7 +90,7 @@ def choose_quest(Alice):
     elif Alice.input_text.lower() == "выбрать другой квест":
         Alice.state["state"] = "base"
         Alice.is_use_button = False 
-        text = "Выбери квест"
+        text = Alice.alice_texts["choose_quest_after_finish"]
         Alice.response['response']['text'] = text
         _, cards = hello(Alice)
         Alice.response['response']["card"] = {
@@ -110,7 +107,7 @@ def choose_quest(Alice):
 def settings_choose_dict(Alice):
     key_word = Alice.state["running_quest"] 
     if key_word in Alice.dicts:
-        Alice.response["response"]["text"] = "Приступаем к изменнию ключевых слов: %s. Скажи ключевое слово, а после новое значение" % key_word
+        Alice.response["response"]["text"] = Alice.alice_texts["setting_start"] % key_word
         Alice.state["status"] = "w8_key"
         return
     no_understanding(Alice)
@@ -120,11 +117,11 @@ def settings_get_key(Alice):
     keys_dict = Alice.load_dict()
     key_word = Alice.input_text.lower()
     if key_word not in keys_dict:
-        Alice.response["response"]["text"] = "Неправильное ключевое слово\nПопробуй ещё раз"       
+        Alice.response["response"]["text"] = Alice.alice_texts["setting_wrong_key"]
         return 
     Alice.state["status"] = "w8_value"
     Alice.state["choosen_key"] = key_word
-    Alice.response["response"]["text"] = "Какое место будет?"       
+    Alice.response["response"]["text"] = Alice.alice_texts["setting_good_key"] 
 
 
 def settings_get_value(Alice):
@@ -139,7 +136,7 @@ def settings_get_value(Alice):
     user_dicts[Alice.state["running_quest"]] = temp_dict
     Users.change_data({"user_id": Alice.user_id}, {"keys" : user_dicts})
     
-    Alice.response["response"]["text"] = "Для события: %s изменено ключевое слово %s на %s\nСкажите следущее ключевое слово" % (
+    Alice.response["response"]["text"] = Alice.alice_texts["setting_setup"] % (
         Alice.state["running_quest"],
         Alice.state["choosen_key"],
         key_word,
@@ -152,7 +149,7 @@ def settings(Alice):
     
     if key_word in ["остановить настройку", "стоп"]:
         Alice.state["state"] = "choose_quest"
-        Alice.response["response"]["text"] = "Готово. Изменения внесены."
+        Alice.response["response"]["text"] = Alice.alice_texts["setting_end"]
     
     elif Alice.state["status"] == "choose_dict":
         settings_choose_dict(Alice)
@@ -163,29 +160,19 @@ def settings(Alice):
     elif Alice.state["status"] == "w8_value":
         settings_get_value(Alice)
 
-    
-
-
-    # elif key_word not in keys_dict:
-    #     Alice.response['response']['text'] = "Неправильное ключевое слово\nПопробуй ещё раз"
-    # else:
-    #     keys = ["Локация", "Искомое место", "Здесь", "Посмотри тут"]
-    #     Alice.response['response']['text'] = "%s: %s" % (choice(keys), keys_dict[key_word])
-
-    # Alice.response['response']['text'] = "QU"
-
 
 def no_understanding(Alice):  
-    if Alice.state["no_understanding"] == 3:
-        Alice.response['response']['text'] = "Я запутался. Давай начнём сначала.\nВебри квест"
+    if Alice.state["no_understanding"] >= 3:
+        Alice.state["state"] = "base"
+        Alice.response['response']['text'] = Alice.alice_texts["no_understate_more"]
         _, cards = hello(Alice)
         Alice.response['response']["card"] = {
             "type": "ItemsList",
             "header": {
-                "text": "Я запутался. Давай начнём сначала.\nВебри квест",
+                "text": Alice.alice_texts["no_understate_more"],
             },
             "items" : cards
         }
         return
-    Alice.response['response']['text'] = "Я тебя не понял. Попробуй повторить"
+    Alice.response['response']['text'] = Alice.alice_texts["no_understate"]
     Alice.state["no_understanding"] += 1
