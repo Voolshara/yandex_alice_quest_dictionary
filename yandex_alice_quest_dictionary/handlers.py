@@ -54,6 +54,7 @@ def quest_state(Alice):
 
 def base_state(Alice):
     if Alice.input_text.lower() == "выбрать квест":
+        Alice.is_use_button = False 
         text = "Давай начнём. Выбери квест"
         Alice.response['response']['text'] = text
         _, cards = hello(Alice)
