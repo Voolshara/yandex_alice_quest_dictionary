@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import logging
 
 from yandex_alice_quest_dictionary.db.mongo import Users, Dictionaries
-from yandex_alice_quest_dictionary.handlers import hello, no_understanding, quest_state, base_state, settings
+from yandex_alice_quest_dictionary.handlers import hello, no_understanding, quest_state, base_state, settings, choose_quest
 
 def get_dicts_list_and_description():
     just_list = []
@@ -79,6 +79,11 @@ class Alice_Worker:
                 buttons.append({
                     "title" : "Остановить квест"
                 })
+            elif self.state["state"] == "choose_quest":
+                buttons.append(
+                    {"title" : "Запустить квест"},
+                    {"title" : "Настроить квест"},
+                )
             elif self.state["state"] == "settings":
                 buttons.append({
                     "title" : "Остановить настройку"
@@ -114,8 +119,8 @@ def main():
 def handle_dialog(Alice):
     if Alice.input_text == "" or Alice.input_text == "Выбрать квест":
         Alice.state = {
-                "state" : "base"
-            }
+            "state" : "base"
+        }
         Alice.is_use_button = False
         ## Проверяем, есть ли содержимое
         ## Если это первое сообщение — представляемся
@@ -132,6 +137,8 @@ def handle_dialog(Alice):
         }
     elif Alice.state["state"] == "base":
         base_state(Alice)
+    elif Alice.state["state"] == "choose_quest":
+        choose_quest(Alice)
     elif Alice.state["state"] == "quest":
         quest_state(Alice)
     elif Alice.state["state"] == "settings":
