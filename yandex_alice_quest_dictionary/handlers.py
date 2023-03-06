@@ -84,7 +84,7 @@ def choose_quest(Alice):
         settings_choose_dict(Alice)
         Alice.state["state"] = "settings"
         Alice.state["no_understanding"] = 0
-    no_understanding() 
+    no_understanding(Alice) 
 
 
 def settings_choose_dict(Alice):
@@ -93,7 +93,7 @@ def settings_choose_dict(Alice):
         Alice.response["response"]["text"] = "Приступаем к изменнию ключевых слов: %s. Скажи ключевое слово, а после новое значение" % key_word
         Alice.state["status"] = "w8_key"
         return
-    no_understanding()
+    no_understanding(Alice)
 
 
 def settings_get_key(Alice):
