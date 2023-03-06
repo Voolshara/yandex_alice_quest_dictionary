@@ -64,6 +64,7 @@ def base_state(Alice):
                 },
                 "items" : cards
         }  
+        return
     elif Alice.input_text.lower() in Alice.dicts:
         Alice.response['response']['text'] = Alice.dicts_descriptions[Alice.input_text]
         Alice.state = {
